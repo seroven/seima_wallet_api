@@ -98,7 +98,7 @@ router.post(
         userIds: revisores,
         type: 'transaction_pending',
         title: 'Nuevo movimiento por validar',
-        body: `Se registró un ${kind} de ${fields.amount}: ${fields.subject}`,
+        body: `Hay un ${kind} pendiente: ${fields.subject}`,
         data: { transactionId: row.id, status: 'pending' },
       });
 
@@ -241,7 +241,7 @@ router.post(
         userIds: [row.created_by],
         type: 'transaction_validated',
         title: 'Movimiento validado',
-        body: `Tu ${kind} "${row.subject}" fue validado con evidencia.`,
+        body: `Tu ${kind} «${row.subject}» ya fue validado.`,
         data: { transactionId: row.id, status: 'validated' },
       });
 
