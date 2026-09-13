@@ -19,6 +19,7 @@ function mapTransaction(row: TransactionRow) {
     status: row.status,
     amount: Number(row.amount),
     subject: row.subject,
+    description: row.description ?? '',
     photoPath: row.photo_path,
     evidencePath: row.evidence_path,
     occurredAt: formatOccurredAt(row.occurred_at),
@@ -58,6 +59,7 @@ router.post(
         type: z.enum(['income', 'expense']),
         amount: z.coerce.number().positive(),
         subject: z.string().min(1).max(255),
+        description: z.string().min(1).max(2000),
         occurredAt: z
           .string()
           .regex(/^\d{4}-\d{2}-\d{2}$/)
@@ -73,6 +75,7 @@ router.post(
           status: 'pending',
           amount: String(fields.amount),
           subject: fields.subject,
+          description: fields.description,
           photo_path: null,
           evidence_path: null,
           occurred_at: occurredAt,
@@ -135,6 +138,7 @@ router.patch(
         type: z.enum(['income', 'expense']).optional(),
         amount: z.coerce.number().positive().optional(),
         subject: z.string().min(1).max(255).optional(),
+        description: z.string().min(1).max(2000).optional(),
         occurredAt: z
           .string()
           .regex(/^\d{4}-\d{2}-\d{2}$/)
@@ -150,6 +154,7 @@ router.patch(
       if (fields.type !== undefined) updates.type = fields.type;
       if (fields.amount !== undefined) updates.amount = String(fields.amount);
       if (fields.subject !== undefined) updates.subject = fields.subject;
+      if (fields.description !== undefined) updates.description = fields.description;
       if (fields.occurredAt !== undefined) updates.occurred_at = fields.occurredAt;
 
       const [row] = await db<TransactionRow>('transactions')

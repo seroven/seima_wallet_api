@@ -9,6 +9,7 @@ export function toSnapshot(row: TransactionRow): TransactionSnapshot {
     status: row.status,
     amount: String(row.amount),
     subject: row.subject,
+    description: row.description ?? '',
     photo_path: row.photo_path,
     evidence_path: row.evidence_path,
     occurred_at: formatOccurredAt(row.occurred_at),

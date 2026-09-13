@@ -29,6 +29,7 @@ export type TransactionRow = {
   status: TransactionStatus;
   amount: string;
   subject: string;
+  description: string;
   photo_path: string | null;
   evidence_path: string | null;
   occurred_at: string | Date;
@@ -47,6 +48,7 @@ export type TransactionSnapshot = {
   status: TransactionStatus;
   amount: string;
   subject: string;
+  description: string;
   photo_path: string | null;
   evidence_path: string | null;
   occurred_at: string;
