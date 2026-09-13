@@ -94,7 +94,7 @@ router.post(
 
       const revisores = await getUserIdsByRole('revisor');
       const kind = fields.type === 'income' ? 'ingreso' : 'gasto';
-      void notifyUsers({
+      await notifyUsers({
         userIds: revisores,
         type: 'transaction_pending',
         title: 'Nuevo movimiento por validar',
@@ -236,7 +236,8 @@ router.post(
       });
 
       const kind = row.type === 'income' ? 'ingreso' : 'gasto';
-      void notifyUsers({
+      // Aviso a quien registró el movimiento (creador / registrador).
+      await notifyUsers({
         userIds: [row.created_by],
         type: 'transaction_validated',
         title: 'Movimiento validado',
