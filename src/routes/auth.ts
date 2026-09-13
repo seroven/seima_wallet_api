@@ -31,7 +31,7 @@ router.post(
     try {
       const { username, password } = req.body as z.infer<typeof loginSchema>;
       const user = await db<UserRow>('users').where({ username }).first();
-      if (!user) {
+      if (!user || user.is_active === false) {
         res.status(401).json({ error: 'Invalid credentials' });
         return;
       }
@@ -42,7 +42,11 @@ router.post(
         return;
       }
 
-      const publicUser = toPublicUser(user);
+      const publicUser = await toPublicUser(user);
+      if (publicUser.roles.length === 0) {
+        res.status(403).json({ error: 'User has no roles assigned' });
+        return;
+      }
       const token = signToken(publicUser);
       res.json({ token, user: publicUser });
     } catch (err) {
@@ -58,7 +62,7 @@ router.get('/me', requireAuth, async (req: AuthRequest, res, next) => {
       res.status(404).json({ error: 'User not found' });
       return;
     }
-    res.json({ user: toPublicUser(user) });
+    res.json({ user: await toPublicUser(user) });
   } catch (err) {
     next(err);
   }

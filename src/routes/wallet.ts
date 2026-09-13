@@ -14,6 +14,7 @@ const currencySchema = z.object({
 async function computeBalance(): Promise<number> {
   const rows = (await db('transactions')
     .whereNull('deleted_at')
+    .where({ status: 'validated' })
     .select('type')
     .sum({ total: 'amount' })
     .groupBy('type')) as Array<{ type: string; total: string | number | null }>;

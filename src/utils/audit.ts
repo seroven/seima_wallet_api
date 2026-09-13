@@ -1,21 +1,21 @@
 import { db } from '../db/knex';
 import { AuditAction, TransactionRow, TransactionSnapshot } from '../types';
+import { formatOccurredAt } from './mappers';
 
 export function toSnapshot(row: TransactionRow): TransactionSnapshot {
-  const occurred =
-    row.occurred_at instanceof Date
-      ? row.occurred_at.toISOString().slice(0, 10)
-      : String(row.occurred_at).slice(0, 10);
-
   return {
     id: row.id,
     type: row.type,
+    status: row.status,
     amount: String(row.amount),
     subject: row.subject,
     photo_path: row.photo_path,
-    occurred_at: occurred,
+    evidence_path: row.evidence_path,
+    occurred_at: formatOccurredAt(row.occurred_at),
     created_by: row.created_by,
     updated_by: row.updated_by,
+    validated_by: row.validated_by,
+    validated_at: row.validated_at ? new Date(row.validated_at).toISOString() : null,
     deleted_at: row.deleted_at ? new Date(row.deleted_at).toISOString() : null,
   };
 }

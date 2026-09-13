@@ -7,6 +7,7 @@ import authRoutes from './routes/auth';
 import usersRoutes from './routes/users';
 import walletRoutes from './routes/wallet';
 import transactionsRoutes from './routes/transactions';
+import devicesRoutes from './routes/devices';
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/wallet', walletRoutes);
 app.use('/api/transactions', transactionsRoutes);
+app.use('/api/devices', devicesRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ error: 'Not found' });
